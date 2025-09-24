@@ -7,6 +7,9 @@ import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController // 声明这是一个 RESTful 风格的 Controller
 @RequestMapping("/api/user") // 为该 Controller 下的所有接口设置一个统一的前缀，例如 /api/user
 public class UserController {
@@ -30,6 +33,24 @@ public class UserController {
         } catch (Exception e) {
             // 捕获其他未知异常
             return ResponseEntity.internalServerError().body("服务器内部错误"); // 返回 500 Internal Server Error
+        }
+    }
+
+    /**
+     * 用户登录接口
+     * @param user 包含用户名和密码的 JSON 对象
+     * @return 包含 Token 的响应
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user) {
+        try {
+            String token = userService.login(user.getUsername(), user.getPassword());
+            // 为了方便前端使用，我们返回一个包含 token 的 JSON 对象
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            return ResponseEntity.ok(response);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
