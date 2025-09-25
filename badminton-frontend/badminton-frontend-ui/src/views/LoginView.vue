@@ -1,47 +1,34 @@
 <script setup>
 import { ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus' // 导入 Element Plus 的消息提示组件
-import { useRouter } from 'vue-router' // 导入 Vue Router 的 useRouter
-import { useUserStore } from '@/stores/user' // 导入我们创建的 Pinia store
-import { login } from '@/api' // 导入我们封装的登录 API
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+import { login } from '@/api'
 
-// 路由实例，用于页面跳转
 const router = useRouter()
-// Pinia store 实例
-const userStore = useUserStore()
+// const userStore = useUserStore() // <--- 删除这一行
 
 const loginForm = ref({
   username: '',
   password: ''
 })
 
-// 登录按钮的点击事件处理函数
 const handleLogin = async () => {
-  // 表单校验（简单示例）
   if (!loginForm.value.username || !loginForm.value.password) {
     ElMessage.error('用户名和密码不能为空！')
     return
   }
-
   try {
-    // 调用我们封装的 API
     const response = await login(loginForm.value.username, loginForm.value.password)
-
-    // 从响应中获取 token
     const token = response.data.token
 
-    // 使用 Pinia store 来存储 token
+    const userStore = useUserStore() // <--- 在这里调用
     userStore.setToken(token)
 
-    // 弹出成功提示
     ElMessage.success('登录成功！')
-
-    // 跳转到主页 (我们暂时还没有主页，先跳转到一个不存在的 /home 路径)
     router.push('/home')
-
   } catch (error) {
-    // 处理登录失败的情况
     ElMessage.error(error.response?.data || '登录失败，请检查您的用户名和密码')
   }
 }
@@ -84,13 +71,15 @@ const handleLogin = async () => {
       </el-form>
 
       <div class="register-link">
-        还没有账号？<el-link type="primary">去注册</el-link>
+        还没有账号？
+        <el-link type="primary">去注册</el-link>
       </div>
     </el-card>
   </div>
 </template>
 
 <style scoped>
+/* style 部分保持不变 */
 .login-container {
   display: flex;
   justify-content: center;
