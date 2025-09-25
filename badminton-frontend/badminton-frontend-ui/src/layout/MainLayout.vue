@@ -47,6 +47,10 @@ const handleLogout = () => {
             <el-icon><GobletSquare /></el-icon>
             <span>球拍租赁</span>
           </el-menu-item>
+          <el-menu-item index="/home/my-rentals">
+            <el-icon><GobletSquare /></el-icon>
+            <span>我的租借</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
 

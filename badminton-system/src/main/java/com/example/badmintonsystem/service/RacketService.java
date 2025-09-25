@@ -17,4 +17,10 @@ public interface RacketService {
      * @return 创建成功后的租借记录
      */
     RacketRental rentRacket(Integer racketId);
+
+    /**
+     * 获取当前登录用户的所有租借记录
+     * @return 租借记录列表
+     */
+    List<RacketRental> getMyRentals();
 }

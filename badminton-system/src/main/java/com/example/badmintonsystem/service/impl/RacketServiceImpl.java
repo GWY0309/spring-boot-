@@ -61,4 +61,17 @@ public class RacketServiceImpl implements RacketService {
 
         return rental;
     }
+
+    @Override
+    public List<RacketRental> getMyRentals() {
+        // 1. 获取当前登录用户的信息
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User currentUser = userMapper.findByUsername(username);
+        if (currentUser == null) {
+            throw new CustomException("无法获取用户信息，请重新登录");
+        }
+
+        // 2. 根据用户ID查询其租借记录
+        return racketRentalMapper.findByUserId(currentUser.getId());
+    }
 }

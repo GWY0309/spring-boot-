@@ -52,3 +52,8 @@ export const cancelReservation = (reservationId) => {
   // 注意，我们的后端接口是 PUT /api/reservations/{id}/cancel
   return apiClient.put(`/reservations/${reservationId}/cancel`);
 };
+
+// 新增：定义获取“我的租借”列表的接口
+export const getMyRentals = () => {
+  return apiClient.get('/rentals/my');
+};

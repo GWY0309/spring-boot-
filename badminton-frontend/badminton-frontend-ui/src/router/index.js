@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue'     // 导入主页
 import { useUserStore } from '@/stores/user' // 导入 Pinia store
 import CourtListView from '../views/CourtListView.vue';
 import MyReservationsView from '../views/MyReservationsView.vue';
+import MyRentalsView from '../views/MyRentalsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,11 @@ const router = createRouter({
           path: 'my-reservations', // 访问路径是 /home/my-reservations
           name: 'my-reservations',
           component: MyReservationsView
+        },
+        {
+          path: 'my-rentals', // 访问路径是 /home/my-rentals
+          name: 'my-rentals',
+          component: MyRentalsView
         }
       ]
     }
