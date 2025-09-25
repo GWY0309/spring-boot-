@@ -18,4 +18,19 @@ public interface RacketRentalMapper {
      * @return 该用户的租借列表
      */
     List<RacketRental> findByUserId(Long userId);
+
+    /**
+     * 根据ID查询租借记录
+     * @param id 租借ID
+     * @return 租借记录对象
+     */
+    RacketRental findById(Long id);
+
+    /**
+     * 更新租借记录（用于归还）
+     * @param rental 包含更新信息的租借对象
+     * @return 更新的行数
+     */
+    int update(RacketRental rental);
+
 }

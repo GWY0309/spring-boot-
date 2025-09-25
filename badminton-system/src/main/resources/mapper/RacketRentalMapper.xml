@@ -9,4 +9,25 @@
         VALUES (#{racketId}, #{userId}, NOW(), 0)
     </insert>
 
+    <select id="findByUserId" resultType="com.example.badmintonsystem.entity.RacketRental">
+        SELECT *
+        FROM t_racket_rental
+        WHERE user_id = #{userId}
+        ORDER BY rental_time DESC
+    </select>
+
+    <select id="findById" resultType="com.example.badmintonsystem.entity.RacketRental">
+        SELECT * FROM t_racket_rental WHERE id = #{id}
+    </select>
+
+    <update id="update">
+        UPDATE t_racket_rental
+        SET
+            return_time = #{returnTime},
+            total_cost = #{totalCost},
+            status = #{status}
+        WHERE
+            id = #{id}
+    </update>
+
 </mapper>

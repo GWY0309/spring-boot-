@@ -57,3 +57,8 @@ export const cancelReservation = (reservationId) => {
 export const getMyRentals = () => {
   return apiClient.get('/rentals/my');
 };
+
+// 新增：定义归还球拍的接口
+export const returnRacket = (rentalId) => {
+  return apiClient.put(`/rentals/${rentalId}/return`);
+};

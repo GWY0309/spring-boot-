@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getMyRentals } from '@/api'; // 导入API
-import { ElMessage } from 'element-plus';
+import { getMyRentals, returnRacket } from '@/api'; // 导入新的API
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 const rentalList = ref([]);
 const loading = ref(true);
@@ -21,6 +21,32 @@ const fetchMyRentals = async () => {
 onMounted(() => {
   fetchMyRentals();
 });
+
+// --- 新增：处理归还按钮的点击事件 ---
+const handleReturn = (rentalId) => {
+  ElMessageBox.confirm(
+    '您确定要归还这把球拍吗？',
+    '确认归还',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'info',
+    }
+  )
+    .then(async () => {
+      try {
+        await returnRacket(rentalId);
+        ElMessage.success('球拍归还成功！');
+        // 归还成功后，立即刷新列表以显示最新状态
+        fetchMyRentals();
+      } catch (error) {
+        ElMessage.error(error.response?.data || '归还失败，请稍后再试');
+      }
+    })
+    .catch(() => {
+      ElMessage.info('操作已取消');
+    });
+};
 </script>
 
 <template>
@@ -43,6 +69,7 @@ onMounted(() => {
           <el-button
             type="success"
             size="small"
+            @click="handleReturn(scope.row.id)"
             :disabled="scope.row.status !== 0"
           >
             归还

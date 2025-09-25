@@ -23,4 +23,11 @@ public interface RacketService {
      * @return 租借记录列表
      */
     List<RacketRental> getMyRentals();
+
+    /**
+     * 归还一个球拍
+     * @param rentalId 要归还的租借记录ID
+     * @return 更新后的租借记录
+     */
+    RacketRental returnRacket(Long rentalId);
 }
