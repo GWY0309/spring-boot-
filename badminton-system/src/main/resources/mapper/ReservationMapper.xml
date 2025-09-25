@@ -35,4 +35,10 @@
         VALUES (#{userId}, #{courtId}, #{reservationDate}, #{startTime}, #{endTime}, #{totalCost}, 0, NOW(), NOW())
     </insert>
 
+    <select id="findAll" resultType="com.example.badmintonsystem.entity.Reservation">
+        SELECT *
+        FROM t_reservation
+        ORDER BY create_time DESC
+    </select>
+
 </mapper>

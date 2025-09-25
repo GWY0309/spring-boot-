@@ -27,4 +27,24 @@ public interface RacketMapper {
      * @return 更新的行数
      */
     int updateStatus(@Param("id") Integer id, @Param("status") Integer status);
+
+    /**
+     * 插入一条新的球拍记录
+     * @param racket 球拍对象
+     */
+    void insert(Racket racket);
+
+    /**
+     * 更新球拍信息
+     * @param racket 包含ID和待更新字段的球拍对象
+     * @return 更新的行数
+     */
+    int update(Racket racket);
+
+    /**
+     * 根据ID删除球拍
+     * @param id 球拍ID
+     * @return 删除的行数
+     */
+    int deleteById(Integer id);
 }

@@ -53,4 +53,10 @@ public interface ReservationMapper {
      * @return 更新的行数
      */
     int updateStatus(@Param("id") Long id, @Param("status") Integer status);
+
+    /**
+     * (管理员)查询系统内所有预约记录
+     * @return 所有预约记录列表
+     */
+    List<Reservation> findAll();
 }

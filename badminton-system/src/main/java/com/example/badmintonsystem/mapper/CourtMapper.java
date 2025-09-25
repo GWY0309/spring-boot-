@@ -20,4 +20,18 @@ public interface CourtMapper {
      * @param court 场地对象
      */
     void insert(Court court);
+
+    /**
+     * 更新场地信息
+     * @param court 包含ID和待更新字段的场地对象
+     * @return 更新的行数
+     */
+    int update(Court court);
+
+    /**
+     * 根据ID删除场地
+     * @param id 场地ID
+     * @return 删除的行数
+     */
+    int deleteById(Integer id);
 }

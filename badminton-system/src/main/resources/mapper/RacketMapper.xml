@@ -16,4 +16,24 @@
         UPDATE t_racket SET status = #{status} WHERE id = #{id}
     </update>
 
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_racket (brand, model, status, rental_price_per_hour)
+        VALUES (#{brand}, #{model}, #{status}, #{rentalPricePerHour})
+    </insert>
+
+    <update id="update">
+        UPDATE t_racket
+        SET
+            brand = #{brand},
+            model = #{model},
+            status = #{status},
+            rental_price_per_hour = #{rentalPricePerHour}
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM t_racket WHERE id = #{id}
+    </delete>
+
 </mapper>

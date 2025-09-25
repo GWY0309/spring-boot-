@@ -15,4 +15,21 @@
         INSERT INTO t_court (name, type, status, price_per_hour, open_time, close_time)
         VALUES (#{name}, #{type}, #{status}, #{pricePerHour}, #{openTime}, #{closeTime})
     </insert>
+
+    <update id="update">
+        UPDATE t_court
+        SET
+            name = #{name},
+            type = #{type},
+            status = #{status},
+            price_per_hour = #{pricePerHour},
+            open_time = #{openTime},
+            close_time = #{closeTime}
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM t_court WHERE id = #{id}
+    </delete>
 </mapper>
