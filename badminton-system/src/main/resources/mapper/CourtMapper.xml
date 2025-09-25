@@ -6,4 +6,7 @@
     <select id="findAll" resultType="com.example.badmintonsystem.entity.Court">
         SELECT * FROM t_court
     </select>
+    <select id="findById" resultType="com.example.badmintonsystem.entity.Court">
+        SELECT * FROM t_court WHERE id = #{id}
+    </select>
 </mapper>

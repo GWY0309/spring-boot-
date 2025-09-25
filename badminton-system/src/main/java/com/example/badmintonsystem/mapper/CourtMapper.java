@@ -12,4 +12,5 @@ public interface CourtMapper {
      * @return 场地列表
      */
     List<Court> findAll();
+    Court findById(Integer id);
 }

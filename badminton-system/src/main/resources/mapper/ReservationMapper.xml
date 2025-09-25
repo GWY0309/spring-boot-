@@ -4,4 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.badmintonsystem.mapper.ReservationMapper">
 
+    <select id="findOverlappingReservations" resultType="com.example.badmintonsystem.entity.Reservation">
+        SELECT *
+        FROM t_reservation
+        WHERE
+            court_id = #{courtId}
+          AND reservation_date = #{date}
+          AND status != 2 -- 状态不为“已取消”的才算
+            AND #{startTime} <![CDATA[ < ]]> end_time
+          AND #{endTime} <![CDATA[ > ]]> start_time
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_reservation (user_id, court_id, reservation_date, start_time, end_time, total_cost, status, create_time, update_time)
+        VALUES (#{userId}, #{courtId}, #{reservationDate}, #{startTime}, #{endTime}, #{totalCost}, 0, NOW(), NOW())
+    </insert>
+
 </mapper>
