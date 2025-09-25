@@ -31,4 +31,26 @@ public interface ReservationMapper {
      * @param reservation 预约对象
      */
     void insert(Reservation reservation);
+
+    /**
+     * 根据用户ID查询其所有预约记录
+     * @param userId 用户ID
+     * @return 该用户的预约列表
+     */
+    List<Reservation> findByUserId(Long userId);
+
+    /**
+     * 根据ID查询预约记录
+     * @param id 预约ID
+     * @return 预约对象
+     */
+    Reservation findById(Long id);
+
+    /**
+     * 更新预约状态
+     * @param id 预约ID
+     * @param status 新的状态
+     * @return 更新的行数
+     */
+    int updateStatus(@Param("id") Long id, @Param("status") Integer status);
 }

@@ -13,6 +13,11 @@
         WHERE
             username = #{username}
     </select>
+
+    <select id="findAll" resultType="com.example.badmintonsystem.entity.User">
+        SELECT id, username, nickname, phone, role, create_time, update_time FROM t_user
+    </select>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_user (username, password, nickname, phone, role, create_time, update_time)
         VALUES (#{username}, #{password}, #{nickname}, #{phone}, #{role}, NOW(), NOW())

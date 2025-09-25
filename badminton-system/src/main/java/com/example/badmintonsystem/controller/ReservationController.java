@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping; // 导入 GetMapping
+import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable; // 导入 PathVariable
+import org.springframework.web.bind.annotation.PutMapping;   // 导入 PutMapping
 
 @RestController
 @RequestMapping("/api/reservations") // 所有预约相关的接口，都以 /api/reservations 开头
@@ -33,6 +37,33 @@ public class ReservationController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             // 捕获其他未知异常
+            return ResponseEntity.internalServerError().body("服务器内部错误：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取当前登录用户的所有预约记录
+     * @return 预约记录列表
+     */
+    @GetMapping("/my")
+    public ResponseEntity<List<Reservation>> getMyReservations() {
+        List<Reservation> reservations = reservationService.getMyReservations();
+        return ResponseEntity.ok(reservations);
+    }
+
+    /**
+     * 取消一个预约
+     * @param id 要取消的预约ID，从URL路径中获取
+     * @return 操作结果
+     */
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<?> cancelReservation(@PathVariable Long id) {
+        try {
+            reservationService.cancelReservation(id);
+            return ResponseEntity.ok("预约已成功取消");
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body("服务器内部错误：" + e.getMessage());
         }
     }

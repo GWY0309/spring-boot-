@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.Collections;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,7 +57,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UserDetails userDetails = new org.springframework.security.core.userdetails.User(
                             user.getUsername(),
                             user.getPassword(),
-                            new ArrayList<>()
+                            // 将用户的角色（例如 "ADMIN"）包装成一个权限对象
+                            Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
                     );
 
                     if (jwtUtil.validateToken(jwt, user)) {

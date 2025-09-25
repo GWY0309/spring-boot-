@@ -6,7 +6,13 @@
     <select id="findAll" resultType="com.example.badmintonsystem.entity.Court">
         SELECT * FROM t_court
     </select>
+
     <select id="findById" resultType="com.example.badmintonsystem.entity.Court">
         SELECT * FROM t_court WHERE id = #{id}
     </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_court (name, type, status, price_per_hour, open_time, close_time)
+        VALUES (#{name}, #{type}, #{status}, #{pricePerHour}, #{openTime}, #{closeTime})
+    </insert>
 </mapper>

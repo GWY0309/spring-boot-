@@ -12,5 +12,12 @@ public interface CourtMapper {
      * @return 场地列表
      */
     List<Court> findAll();
+
     Court findById(Integer id);
+
+    /**
+     * 插入一条新的场地记录
+     * @param court 场地对象
+     */
+    void insert(Court court);
 }

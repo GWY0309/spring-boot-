@@ -15,6 +15,21 @@
           AND #{endTime} <![CDATA[ > ]]> start_time
     </select>
 
+    <select id="findByUserId" resultType="com.example.badmintonsystem.entity.Reservation">
+        SELECT *
+        FROM t_reservation
+        WHERE user_id = #{userId}
+        ORDER BY reservation_date DESC, start_time DESC
+    </select>
+
+    <select id="findById" resultType="com.example.badmintonsystem.entity.Reservation">
+        SELECT * FROM t_reservation WHERE id = #{id}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE t_reservation SET status = #{status} WHERE id = #{id}
+    </update>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_reservation (user_id, court_id, reservation_date, start_time, end_time, total_cost, status, create_time, update_time)
         VALUES (#{userId}, #{courtId}, #{reservationDate}, #{startTime}, #{endTime}, #{totalCost}, 0, NOW(), NOW())

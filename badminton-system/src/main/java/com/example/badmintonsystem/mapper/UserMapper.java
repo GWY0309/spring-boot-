@@ -2,6 +2,7 @@ package com.example.badmintonsystem.mapper;
 
 import com.example.badmintonsystem.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import java.util.List; // 导入 List
 
 @Mapper // 告诉 Spring Boot 这是一个 MyBatis 的 Mapper 接口
 public interface UserMapper {
@@ -11,4 +12,5 @@ public interface UserMapper {
     User findByUsername(String username);
     // 在 UserMapper.java 文件中，findByUsername 方法下面，添加新方法
     void insert(User user);
+    List<User> findAll();
 }
