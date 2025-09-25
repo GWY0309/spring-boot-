@@ -5,9 +5,10 @@ import { ElMessage } from 'element-plus'
 import { HomeFilled, Place, Tickets, GobletSquare } from '@element-plus/icons-vue'
 
 const router = useRouter()
-const userStore = useUserStore()
+// const userStore = useUserStore() // <--- 删除这一行
 
 const handleLogout = () => {
+  const userStore = useUserStore() // <--- 在这里调用
   userStore.clearToken()
   ElMessage.success('您已成功退出登录')
   router.push('/')
@@ -32,39 +33,51 @@ const handleLogout = () => {
           class="el-menu-vertical"
         >
           <el-menu-item index="/home/dashboard">
-            <el-icon><HomeFilled /></el-icon>
+            <el-icon>
+              <HomeFilled/>
+            </el-icon>
             <span>首页</span>
           </el-menu-item>
           <el-menu-item index="/home/courts">
-            <el-icon><Place /></el-icon>
+            <el-icon>
+              <Place/>
+            </el-icon>
             <span>场地列表</span>
           </el-menu-item>
           <el-menu-item index="/home/my-reservations">
-            <el-icon><Tickets /></el-icon>
+            <el-icon>
+              <Tickets/>
+            </el-icon>
             <span>我的预约</span>
           </el-menu-item>
           <el-menu-item index="/home/rackets">
-            <el-icon><GobletSquare /></el-icon>
+            <el-icon>
+              <GobletSquare/>
+            </el-icon>
             <span>球拍租赁</span>
           </el-menu-item>
           <el-menu-item index="/home/my-rentals">
-            <el-icon><GobletSquare /></el-icon>
+            <el-icon>
+              <GobletSquare/>
+            </el-icon>
             <span>我的租借</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
 
       <el-main class="main-content">
-        <RouterView />
+        <RouterView/>
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <style scoped>
+/* style 部分保持不变 */
 .main-layout {
   height: 100vh;
 }
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -72,23 +85,29 @@ const handleLogout = () => {
   background-color: #fff;
   border-bottom: 1px solid #dcdfe6;
 }
+
 .logo-title {
   font-size: 20px;
   font-weight: bold;
 }
+
 .user-info {
   display: flex;
   align-items: center;
 }
+
 .user-info span {
   margin-right: 15px;
 }
+
 .aside {
   border-right: 1px solid #dcdfe6;
 }
+
 .el-menu-vertical {
   height: 100%; /* 让菜单高度占满侧边栏 */
 }
+
 .main-content {
   background-color: #f0f2f5;
   padding: 20px;
