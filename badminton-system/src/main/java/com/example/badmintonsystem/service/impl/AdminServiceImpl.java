@@ -64,8 +64,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Reservation> getAllReservations() {
-        return reservationMapper.findAll();
+    public List<Reservation> getAllReservations(Long userId, Integer status) {
+        return reservationMapper.findAll(userId, status);
     }
 
     @Override
@@ -97,8 +97,8 @@ public class AdminServiceImpl implements AdminService {
     // --- 2. 以下是新增的两个方法 ---
 
     @Override
-    public List<RacketRental> getAllRentals() {
-        return racketRentalMapper.findAll();
+    public List<RacketRental> getAllRentals(Long userId, Integer status) {
+        return racketRentalMapper.findAll(userId, status);
     }
 
     @Override

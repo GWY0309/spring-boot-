@@ -38,6 +38,14 @@
     <select id="findAll" resultType="com.example.badmintonsystem.entity.Reservation">
         SELECT *
         FROM t_reservation
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
         ORDER BY create_time DESC
     </select>
 

@@ -61,9 +61,9 @@ export const deleteRacket = (id) => {
 
 // --- 租借管理 API ---
 
-// (管理员)获取所有租借记录
-export const getAllRentals = () => {
-  return adminApiClient.get('/rentals')
+// (管理员)获取所有租借记录 (支持查询)
+export const getAllRentals = (params) => { // 接收一个参数对象
+  return adminApiClient.get('/rentals', { params: params }) // 将参数对象传递给axios
 }
 
 // (管理员)强制归还球拍
@@ -73,10 +73,10 @@ export const forceReturnRacket = (rentalId) => {
 
 // ------------------
 
-// (管理员)获取所有预约记录
-export const getAllReservations = () => {
-  return adminApiClient.get('/reservations')
-}
+// (管理员)获取所有预约记录 (支持查询)
+export const getAllReservations = (params) => {
+  return adminApiClient.get('/reservations', { params });
+};
 
 export const createReservation = (reservationData) => {
   return adminApiClient.post('/reservations', reservationData)

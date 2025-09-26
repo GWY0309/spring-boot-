@@ -32,7 +32,8 @@ public interface AdminService {
      * 获取系统内所有的预约记录
      * @return 预约记录列表
      */
-    List<Reservation> getAllReservations();
+    List<Reservation> getAllReservations(Long userId, Integer status);
+
 
     /**
      * 添加一个新的球拍
@@ -55,11 +56,7 @@ public interface AdminService {
      */
     void deleteRacket(Integer id);
 
-    /**
-     * (管理员)获取所有租借记录
-     * @return 租借记录列表
-     */
-    List<RacketRental> getAllRentals();
+    List<RacketRental> getAllRentals(Long userId, Integer status);
 
     /**
      * (管理员)强制归还一个球拍

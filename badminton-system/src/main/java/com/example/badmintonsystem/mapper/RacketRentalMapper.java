@@ -2,6 +2,7 @@ package com.example.badmintonsystem.mapper;
 
 import com.example.badmintonsystem.entity.RacketRental;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import java.util.List; // 导入 List
 
 @Mapper
@@ -34,9 +35,11 @@ public interface RacketRentalMapper {
     int update(RacketRental rental);
 
     /**
-     * (管理员)查询所有租借记录
+     * (管理员)查询所有租借记录, 可根据userId和status进行筛选
+     * @param userId 用户ID (可选)
+     * @param status 状态 (可选)
      * @return 租借列表
      */
-    List<RacketRental> findAll();
+    List<RacketRental> findAll(@Param("userId") Long userId, @Param("status") Integer status);
 
 }

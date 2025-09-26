@@ -9,19 +9,27 @@ import {
   cancelReservation
 } from '@/api/admin'
 // Icon imports
-import { Plus, Edit, CircleClose } from '@element-plus/icons-vue'
+import { Plus, Edit, CircleClose, Search, Refresh } from '@element-plus/icons-vue'
 
 const reservationList = ref([])
 const loading = ref(true)
 const dialogVisible = ref(false)
 const isEdit = ref(false)
 const currentReservation = ref({})
+const searchParams = ref({
+  userId: null,
+  status: null
+})
 
 // 获取所有预约
 const fetchAllReservations = async () => {
   try {
     loading.value = true
-    const response = await getAllReservations()
+    const params = {
+      userId: searchParams.value.userId || null,
+      status: searchParams.value.status,
+    };
+    const response = await getAllReservations(params)
     reservationList.value = response.data
   } catch (error) {
     ElMessage.error('获取预约列表失败！')
@@ -31,6 +39,16 @@ const fetchAllReservations = async () => {
 }
 
 onMounted(fetchAllReservations)
+
+const handleSearch = () => {
+  fetchAllReservations()
+}
+
+const handleReset = () => {
+  searchParams.value.userId = null
+  searchParams.value.status = null
+  fetchAllReservations()
+}
 
 // 打开新增弹窗
 const handleAdd = () => {
@@ -99,7 +117,27 @@ const getStatusTagType = (status) => {
   <div class="page-container">
     <div class="header-bar">
       <h2>预约总览</h2>
-      <el-button type="primary" :icon="Plus" @click="handleAdd" class="add-button">新增预约</el-button>
+      <div class="search-area">
+        <el-input-number
+          v-model="searchParams.userId"
+          placeholder="按用户ID搜索"
+          :controls="false"
+          style="width: 150px; margin-right: 10px;"
+        />
+        <el-select
+          v-model="searchParams.status"
+          placeholder="按状态筛选"
+          clearable
+          style="width: 150px; margin-right: 10px;"
+        >
+          <el-option label="已预约" :value="0" />
+          <el-option label="已完成" :value="1" />
+          <el-option label="已取消" :value="2" />
+        </el-select>
+        <el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
+        <el-button :icon="Refresh" @click="handleReset">重置</el-button>
+        <el-button type="primary" :icon="Plus" @click="handleAdd" class="add-button">新增预约</el-button>
+      </div>
     </div>
 
     <div v-loading="loading" class="reservation-list-container">
@@ -142,7 +180,7 @@ const getStatusTagType = (status) => {
           </div>
         </div>
       </div>
-      <el-empty v-if="!loading && reservationList.length === 0" description="暂无预约记录" />
+      <el-empty v-if="!loading && reservationList.length === 0" description="没有找到符合条件的预约记录" />
     </div>
 
     <el-dialog
@@ -206,7 +244,6 @@ const getStatusTagType = (status) => {
 </template>
 
 <style scoped>
-/* 这里的样式和租借总览页几乎完全一样，实现了风格统一 */
 .page-container {
   padding: 10px;
 }
@@ -217,6 +254,7 @@ const getStatusTagType = (status) => {
   align-items: center;
 }
 .add-button {
+  margin-left: 10px; /* 给新增按钮一点左边距 */
   box-shadow: 0 2px 12px 0 rgba(64, 158, 255, 0.5);
 }
 .reservation-list-container {

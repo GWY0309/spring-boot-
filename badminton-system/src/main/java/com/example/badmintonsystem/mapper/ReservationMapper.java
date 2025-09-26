@@ -55,10 +55,12 @@ public interface ReservationMapper {
     int updateStatus(@Param("id") Long id, @Param("status") Integer status);
 
     /**
-     * (管理员)查询系统内所有预约记录
+     * (管理员)查询系统内所有预约记录, 可根据userId和status进行筛选
+     * @param userId 用户ID (可选)
+     * @param status 状态 (可选)
      * @return 所有预约记录列表
      */
-    List<Reservation> findAll();
+    List<Reservation> findAll(@Param("userId") Long userId, @Param("status") Integer status);
 
     /**
      * 更新一条预约记录
