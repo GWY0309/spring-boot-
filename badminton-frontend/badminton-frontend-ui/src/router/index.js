@@ -11,6 +11,7 @@ import AdminCourtView from '../views/AdminCourtView.vue'
 import AdminRacketView from '../views/AdminRacketView.vue'
 import AdminRentalView from '../views/AdminRentalView.vue'
 import AdminReservationView from '../views/AdminReservationView.vue'
+import RegisterView from '../views/RegisterView.vue'
 
 
 
@@ -21,6 +22,11 @@ const router = createRouter({
       path: '/',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView
     },
     {
       path: '/home',

@@ -59,4 +59,11 @@ public interface ReservationMapper {
      * @return 所有预约记录列表
      */
     List<Reservation> findAll();
+
+    /**
+     * 更新一条预约记录
+     * @param reservation 预约对象
+     * @return 更新的行数
+     */
+    int update(Reservation reservation);
 }

@@ -41,4 +41,19 @@
         ORDER BY create_time DESC
     </select>
 
+    <update id="update">
+        UPDATE t_reservation
+        SET
+            user_id = #{userId},
+            court_id = #{courtId},
+            reservation_date = #{reservationDate},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            total_cost = #{totalCost},
+            status = #{status},
+            update_time = NOW()
+        WHERE
+            id = #{id}
+    </update>
+
 </mapper>

@@ -136,4 +136,75 @@ public class AdminServiceImpl implements AdminService {
 
         return rental;
     }
+
+    @Override
+    @Transactional
+    public Reservation createReservation(Reservation reservation) {
+        // 管理员创建预约时，也需要检查时间冲突
+        List<Reservation> overlapping = reservationMapper.findOverlappingReservations(
+                reservation.getCourtId(),
+                reservation.getReservationDate(),
+                reservation.getStartTime(),
+                reservation.getEndTime()
+        );
+
+        if (!overlapping.isEmpty()) {
+            throw new CustomException("该时间段已被预约，请选择其他时间");
+        }
+
+        // 同样需要计算费用
+        Court court = courtMapper.findById(reservation.getCourtId());
+        if (court == null) {
+            throw new CustomException("场地不存在");
+        }
+        long hours = Duration.between(reservation.getStartTime(), reservation.getEndTime()).toHours();
+        if (hours <= 0) {
+            throw new CustomException("预约时间不合法");
+        }
+        BigDecimal totalCost = court.getPricePerHour().multiply(new BigDecimal(hours));
+        reservation.setTotalCost(totalCost);
+
+        reservationMapper.insert(reservation);
+        return reservation;
+    }
+
+    @Override
+    @Transactional
+    public Reservation updateReservation(Long id, Reservation reservation) {
+        Reservation existingReservation = reservationMapper.findById(id);
+        if (existingReservation == null) {
+            throw new CustomException("要更新的预约不存在");
+        }
+        // TODO: 在实际项目中，这里也应该有更复杂的业务校验
+        reservation.setId(id);
+
+        // 更新时也需要重新计算费用
+        Court court = courtMapper.findById(reservation.getCourtId());
+        if (court == null) {
+            throw new CustomException("场地不存在");
+        }
+        long hours = Duration.between(reservation.getStartTime(), reservation.getEndTime()).toHours();
+        if (hours <= 0) {
+            throw new CustomException("预约时间不合法");
+        }
+        BigDecimal totalCost = court.getPricePerHour().multiply(new BigDecimal(hours));
+        reservation.setTotalCost(totalCost);
+
+        // 这里我们简单地用一个update方法，需要在Mapper中添加
+        reservationMapper.update(reservation); // 注意：我们需要在Mapper中添加一个update方法
+        return reservation;
+    }
+
+    @Override
+    @Transactional
+    public void cancelReservation(Long id) {
+        Reservation reservation = reservationMapper.findById(id);
+        if (reservation == null) {
+            throw new CustomException("预约记录不存在");
+        }
+        if (reservation.getStatus() == 2) { // 2 代表已取消
+            throw new CustomException("该预约已被取消，请勿重复操作");
+        }
+        reservationMapper.updateStatus(id, 2);
+    }
 }

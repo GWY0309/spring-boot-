@@ -77,3 +77,15 @@ export const forceReturnRacket = (rentalId) => {
 export const getAllReservations = () => {
   return adminApiClient.get('/reservations')
 }
+
+export const createReservation = (reservationData) => {
+  return adminApiClient.post('/reservations', reservationData)
+}
+
+export const updateReservation = (id, reservationData) => {
+  return adminApiClient.put(`/reservations/${id}`, reservationData)
+}
+
+export const cancelReservation = (id) => {
+  return adminApiClient.put(`/reservations/${id}/cancel`)
+}

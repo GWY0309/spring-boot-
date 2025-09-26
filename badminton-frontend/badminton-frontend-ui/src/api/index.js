@@ -29,6 +29,11 @@ export const login = (username, password) => {
   });
 };
 
+// 新增：定义注册接口
+export const register = (userData) => {
+  return apiClient.post('/user/register', userData)
+}
+
 // 定义获取所有场地的接口
 export const getAllCourts = () => {
   return apiClient.get('/courts');

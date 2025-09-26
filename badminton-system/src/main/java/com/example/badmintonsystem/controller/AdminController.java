@@ -101,4 +101,34 @@ public class AdminController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/reservations")
+    public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
+        try {
+            Reservation createdReservation = adminService.createReservation(reservation);
+            return ResponseEntity.ok(createdReservation);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/reservations/{id}")
+    public ResponseEntity<?> updateReservation(@PathVariable Long id, @RequestBody Reservation reservation) {
+        try {
+            Reservation updatedReservation = adminService.updateReservation(id, reservation);
+            return ResponseEntity.ok(updatedReservation);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/reservations/{id}/cancel")
+    public ResponseEntity<?> cancelReservation(@PathVariable Long id) {
+        try {
+            adminService.cancelReservation(id);
+            return ResponseEntity.ok("预约已成功取消");
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

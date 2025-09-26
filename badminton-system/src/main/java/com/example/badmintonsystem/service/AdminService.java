@@ -68,4 +68,25 @@ public interface AdminService {
      */
     RacketRental forceReturnRacket(Long rentalId);
 
+    /**
+     * (管理员) 新增一个预约
+     * @param reservation 预约信息
+     * @return 创建后的预约对象
+     */
+    Reservation createReservation(Reservation reservation);
+
+    /**
+     * (管理员) 更新一个预约
+     * @param id 预约ID
+     * @param reservation 更新后的预约信息
+     * @return 更新后的预约对象
+     */
+    Reservation updateReservation(Long id, Reservation reservation);
+
+    /**
+     * (管理员) 强制取消一个预约
+     * @param id 预约ID
+     */
+    void cancelReservation(Long id);
+
 }
