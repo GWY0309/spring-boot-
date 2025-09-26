@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue' // 1. 在这里导入 onMounted
 import { User, Lock, Edit } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -14,8 +14,19 @@ const registerForm = ref({
   nickname: ''
 })
 
+// 2. 添加 onMounted 钩子
+onMounted(() => {
+  // 每次进入页面时，都清空表单
+  registerForm.value = {
+    username: '',
+    password: '',
+    confirmPassword: '',
+    nickname: ''
+  }
+})
+
 const handleRegister = async () => {
-  // 基础校验
+  // ... handleRegister 函数内容保持不变
   if (!registerForm.value.username || !registerForm.value.password || !registerForm.value.nickname) {
     ElMessage.error('用户名、密码和昵称不能为空！')
     return
@@ -33,7 +44,6 @@ const handleRegister = async () => {
     }
     await register(params)
     ElMessage.success('恭喜您，注册成功！即将跳转到登录页。')
-    // 延迟一秒跳转，给用户看提示的时间
     setTimeout(() => {
       router.push('/')
     }, 1000)

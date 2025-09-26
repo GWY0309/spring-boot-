@@ -56,6 +56,24 @@ public class JwtUtil {
                 .compact();
     }
 
+    /**
+     * 根据用户信息生成 Token
+     * @param user 用户对象
+     * @return JWT Token
+     */
+    public String generateToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole()); // 将角色信息放入 claims
+        claims.put("id", user.getId());     // 顺便把用户ID也放进去
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SECRET_KEY)
+                .compact();
+    }
+
     // 验证 Token 是否有效
     public Boolean validateToken(String token, User user) {
         final String username = extractUsername(token);

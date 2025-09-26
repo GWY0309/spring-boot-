@@ -2,13 +2,18 @@
 import { RouterView, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
-import { HomeFilled, Place, Tickets, GobletSquare, Setting, Sell, List, Calendar} from '@element-plus/icons-vue'
+import {
+  HomeFilled,
+  Place,
+  Tickets,
+  GobletSquare,
+  Setting,
+} from '@element-plus/icons-vue'
 
 const router = useRouter()
-// const userStore = useUserStore() // <--- 删除这一行
+const userStore = useUserStore() // 2. 在顶层获取 store 实例
 
 const handleLogout = () => {
-  const userStore = useUserStore() // <--- 在这里调用
   userStore.clearToken()
   ElMessage.success('您已成功退出登录')
   router.push('/')
@@ -20,7 +25,7 @@ const handleLogout = () => {
     <el-header class="header">
       <div class="logo-title">羽毛球场地预约系统</div>
       <div class="user-info">
-        <span>欢迎您，admin</span>
+        <span>欢迎您，{{ userStore.userInfo.username }}</span>
         <el-button type="danger" plain @click="handleLogout">退出登录</el-button>
       </div>
     </el-header>
@@ -33,53 +38,44 @@ const handleLogout = () => {
           class="el-menu-vertical"
         >
           <el-menu-item index="/home/dashboard">
-            <el-icon>
-              <HomeFilled/>
-            </el-icon>
+            <el-icon><HomeFilled /></el-icon>
             <span>首页</span>
           </el-menu-item>
           <el-menu-item index="/home/courts">
-            <el-icon>
-              <Place/>
-            </el-icon>
+            <el-icon><Place /></el-icon>
             <span>场地列表</span>
           </el-menu-item>
           <el-menu-item index="/home/my-reservations">
-            <el-icon>
-              <Tickets/>
-            </el-icon>
+            <el-icon><Tickets /></el-icon>
             <span>我的预约</span>
           </el-menu-item>
-          <el-menu-item index="/home/rackets">
-            <el-icon>
-              <GobletSquare/>
-            </el-icon>
-            <span>球拍租赁</span>
-          </el-menu-item>
-          <el-menu-item index="/home/my-rentals">
-            <el-icon>
-              <GobletSquare/>
-            </el-icon>
-            <span>我的租借</span>
-          </el-menu-item>
-          <el-menu-item index="/home/admin/courts">
-            <el-icon><Setting /></el-icon> <span>场地管理(后台)</span>
-          </el-menu-item>
-          <el-menu-item index="/home/admin/rackets">
-            <el-icon><Sell /></el-icon> <span>球拍管理(后台)</span>
-          </el-menu-item>
-          <el-menu-item index="/home/admin/rentals">
-            <el-icon><List /></el-icon>
-            <span>租借总览(后台)</span>
-          </el-menu-item>
-          <el-menu-item index="/home/admin/reservations">
-            <el-icon><Calendar /></el-icon>
-            <span>预约总览(后台)</span>
-          </el-menu-item>
+
+          <el-sub-menu index="racket-menu">
+            <template #title>
+              <el-icon><GobletSquare /></el-icon>
+              <span>租球拍</span>
+            </template>
+            <el-menu-item index="/home/rackets">球拍租赁</el-menu-item>
+            <el-menu-item index="/home/my-rentals">我的租借</el-menu-item>
+          </el-sub-menu>
+
+          <template v-if="userStore.isAdmin">
+            <el-sub-menu index="admin-menu">
+              <template #title>
+                <el-icon><Setting /></el-icon>
+                <span>后台管理</span>
+              </template>
+              <el-menu-item index="/home/admin/courts">场地管理</el-menu-item>
+              <el-menu-item index="/home/admin/rackets">球拍管理</el-menu-item>
+              <el-menu-item index="/home/admin/rentals">租借总览</el-menu-item>
+              <el-menu-item index="/home/admin/reservations">预约总览</el-menu-item>
+              <el-menu-item index="/home/admin/users">用户管理</el-menu-item>
+            </el-sub-menu>
+          </template>
         </el-menu>
       </el-aside>
       <el-main class="main-content">
-        <RouterView/>
+        <RouterView />
       </el-main>
     </el-container>
   </el-container>

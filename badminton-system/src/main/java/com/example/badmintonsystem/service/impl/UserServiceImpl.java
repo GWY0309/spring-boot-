@@ -53,6 +53,6 @@ public class UserServiceImpl implements UserService {
         }
 
         // 4. 登录成功，生成 JWT Token
-        return jwtUtil.generateToken(dbUser.getUsername());
+        return jwtUtil.generateToken(dbUser);
     }
 }
