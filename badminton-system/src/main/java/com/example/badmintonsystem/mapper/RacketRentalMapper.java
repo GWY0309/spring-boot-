@@ -33,4 +33,10 @@ public interface RacketRentalMapper {
      */
     int update(RacketRental rental);
 
+    /**
+     * (管理员)查询所有租借记录
+     * @return 租借列表
+     */
+    List<RacketRental> findAll();
+
 }

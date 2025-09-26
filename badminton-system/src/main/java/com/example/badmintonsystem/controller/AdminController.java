@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import com.example.badmintonsystem.entity.Reservation;
 import com.example.badmintonsystem.entity.Racket;
+import com.example.badmintonsystem.entity.RacketRental;
 import java.util.List;
 
 @RestController
@@ -81,6 +82,21 @@ public class AdminController {
         try {
             adminService.deleteRacket(id);
             return ResponseEntity.ok("球拍已成功删除");
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/rentals")
+    public ResponseEntity<List<RacketRental>> getAllRentals() {
+        return ResponseEntity.ok(adminService.getAllRentals());
+    }
+
+    @PutMapping("/rentals/{id}/return")
+    public ResponseEntity<?> forceReturnRacket(@PathVariable Long id) {
+        try {
+            RacketRental rental = adminService.forceReturnRacket(id);
+            return ResponseEntity.ok(rental);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

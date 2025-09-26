@@ -2,7 +2,7 @@
 import { RouterView, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
-import { HomeFilled, Place, Tickets, GobletSquare } from '@element-plus/icons-vue'
+import { HomeFilled, Place, Tickets, GobletSquare, Setting, Sell, List, Calendar} from '@element-plus/icons-vue'
 
 const router = useRouter()
 // const userStore = useUserStore() // <--- 删除这一行
@@ -62,9 +62,22 @@ const handleLogout = () => {
             </el-icon>
             <span>我的租借</span>
           </el-menu-item>
+          <el-menu-item index="/home/admin/courts">
+            <el-icon><Setting /></el-icon> <span>场地管理(后台)</span>
+          </el-menu-item>
+          <el-menu-item index="/home/admin/rackets">
+            <el-icon><Sell /></el-icon> <span>球拍管理(后台)</span>
+          </el-menu-item>
+          <el-menu-item index="/home/admin/rentals">
+            <el-icon><List /></el-icon>
+            <span>租借总览(后台)</span>
+          </el-menu-item>
+          <el-menu-item index="/home/admin/reservations">
+            <el-icon><Calendar /></el-icon>
+            <span>预约总览(后台)</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
-
       <el-main class="main-content">
         <RouterView/>
       </el-main>

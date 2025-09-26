@@ -1,17 +1,16 @@
 package com.example.badmintonsystem.service.impl;
 
+import com.example.badmintonsystem.entity.*;
 import com.example.badmintonsystem.exception.CustomException;
-import com.example.badmintonsystem.entity.Court;
-import com.example.badmintonsystem.entity.User;
-import com.example.badmintonsystem.mapper.CourtMapper;
-import com.example.badmintonsystem.mapper.UserMapper;
+import com.example.badmintonsystem.mapper.*;
 import com.example.badmintonsystem.service.AdminService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import com.example.badmintonsystem.entity.Reservation;
-import com.example.badmintonsystem.mapper.ReservationMapper;
-import com.example.badmintonsystem.entity.Racket; // 导入 Racket
-import com.example.badmintonsystem.mapper.RacketMapper;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,14 +18,17 @@ public class AdminServiceImpl implements AdminService {
     @Resource
     private UserMapper userMapper;
 
-    @Resource // 注入 CourtMapper
+    @Resource
     private CourtMapper courtMapper;
 
-    @Resource // 注入 ReservationMapper
+    @Resource
     private ReservationMapper reservationMapper;
 
-    @Resource // 注入 RacketMapper
+    @Resource
     private RacketMapper racketMapper;
+
+    @Resource // 1. 注入 RacketRentalMapper
+    private RacketRentalMapper racketRentalMapper;
 
     @Override
     public List<User> getAllUsers() {
@@ -35,37 +37,27 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Court addCourt(Court court) {
-        // 这里可以添加一些业务校验，例如检查场地名称是否重复等，我们暂时简化
         courtMapper.insert(court);
         return court;
     }
 
     @Override
     public Court updateCourt(Integer id, Court court) {
-        // 1. 检查场地是否存在
         Court existingCourt = courtMapper.findById(id);
         if (existingCourt == null) {
             throw new CustomException("要更新的场地不存在");
         }
-        // 2. 将传入的ID设置到更新对象中，确保更新的是正确的记录
         court.setId(id);
-
-        // 3. 执行更新
         courtMapper.update(court);
-
-        // 4. 返回更新后的对象
         return court;
     }
 
     @Override
     public void deleteCourt(Integer id) {
-        // 1. 检查场地是否存在
         Court existingCourt = courtMapper.findById(id);
         if (existingCourt == null) {
             throw new CustomException("要删除的场地不存在");
         }
-        // 2. 执行删除
-        // 实际项目中，这里可能还需要检查该场地是否有未完成的预约，我们暂时简化
         courtMapper.deleteById(id);
     }
 
@@ -76,36 +68,72 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Racket addRacket(Racket racket) {
-        // 同样，这里可以添加业务校验，我们暂时简化
         racketMapper.insert(racket);
         return racket;
     }
 
     @Override
     public Racket updateRacket(Integer id, Racket racket) {
-        // 1. 检查球拍是否存在
         Racket existingRacket = racketMapper.findById(id);
         if (existingRacket == null) {
             throw new CustomException("要更新的球拍不存在");
         }
-        // 2. 将传入的ID设置到更新对象中
         racket.setId(id);
-
-        // 3. 执行更新
         racketMapper.update(racket);
-
-        // 4. 返回更新后的对象
         return racket;
     }
 
     @Override
     public void deleteRacket(Integer id) {
-        // 1. 检查球拍是否存在
         Racket existingRacket = racketMapper.findById(id);
         if (existingRacket == null) {
             throw new CustomException("要删除的球拍不存在");
         }
-        // 2. 执行删除 (实际项目中可能需要检查球拍是否正在被租借)
         racketMapper.deleteById(id);
+    }
+
+    // --- 2. 以下是新增的两个方法 ---
+
+    @Override
+    public List<RacketRental> getAllRentals() {
+        return racketRentalMapper.findAll();
+    }
+
+    @Override
+    @Transactional
+    public RacketRental forceReturnRacket(Long rentalId) {
+        // 1. 检查租借记录是否存在
+        RacketRental rental = racketRentalMapper.findById(rentalId);
+        if (rental == null) {
+            throw new CustomException("租借记录不存在");
+        }
+        if (rental.getStatus() == 1) { // 1 表示已归还
+            throw new CustomException("该球拍已归还，请勿重复操作");
+        }
+
+        // 2. 获取球拍信息用于计算费用
+        Racket racket = racketMapper.findById(rental.getRacketId());
+        if (racket == null) {
+            throw new CustomException("关联的球拍信息不存在，请联系技术支持");
+        }
+
+        // 3. 计算租借时长和费用
+        LocalDateTime returnTime = LocalDateTime.now();
+        Duration duration = Duration.between(rental.getRentalTime(), returnTime);
+        long hours = (long) Math.ceil(duration.toMinutes() / 60.0); // 不足一小时按一小时算
+        hours = Math.max(hours, 1); // 至少算一小时
+
+        BigDecimal totalCost = racket.getRentalPricePerHour().multiply(new BigDecimal(hours));
+
+        // 4. 更新租借记录
+        rental.setReturnTime(returnTime);
+        rental.setTotalCost(totalCost);
+        rental.setStatus(1); // 设置为“已归还”
+        racketRentalMapper.update(rental);
+
+        // 5. 更新球拍状态为“可用” (0)
+        racketMapper.updateStatus(rental.getRacketId(), 0);
+
+        return rental;
     }
 }

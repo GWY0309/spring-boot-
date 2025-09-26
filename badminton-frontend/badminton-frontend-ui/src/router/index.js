@@ -5,9 +5,13 @@ import HomeView from '../views/HomeView.vue'
 import { useUserStore } from '@/stores/user'
 import CourtListView from '../views/CourtListView.vue'
 import MyReservationsView from '../views/MyReservationsView.vue'
-// 确保您已经创建了 MyRentalsView 和 RacketRentalView，并导入它们
 import MyRentalsView from '../views/MyRentalsView.vue'
 import RacketRentalView from '../views/RacketRentalView.vue'
+import AdminCourtView from '../views/AdminCourtView.vue'
+import AdminRacketView from '../views/AdminRacketView.vue'
+import AdminRentalView from '../views/AdminRentalView.vue'
+import AdminReservationView from '../views/AdminReservationView.vue'
+
 
 
 const router = createRouter({
@@ -47,6 +51,26 @@ const router = createRouter({
           path: 'rackets',
           name: 'racket-rental',
           component: RacketRentalView
+        },
+        {
+          path: 'admin/courts',
+          name: 'admin-court-management',
+          component: AdminCourtView
+        },
+        {
+          path: 'admin/rackets',
+          name: 'admin-racket-management',
+          component: AdminRacketView
+        },
+        {
+          path: 'admin/rentals',
+          name: 'admin-rental-management',
+          component: AdminRentalView
+        },
+        {
+          path: 'admin/reservations',
+          name: 'admin-reservation-management',
+          component: AdminReservationView
         }
       ]
     }

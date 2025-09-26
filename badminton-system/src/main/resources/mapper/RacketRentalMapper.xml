@@ -30,4 +30,10 @@
             id = #{id}
     </update>
 
+    <select id="findAll" resultType="com.example.badmintonsystem.entity.RacketRental">
+        SELECT *
+        FROM t_racket_rental
+        ORDER BY rental_time DESC
+    </select>
+
 </mapper>

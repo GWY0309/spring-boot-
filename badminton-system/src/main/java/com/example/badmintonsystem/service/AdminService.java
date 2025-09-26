@@ -1,9 +1,7 @@
 package com.example.badmintonsystem.service;
 
-import com.example.badmintonsystem.entity.Court;
-import com.example.badmintonsystem.entity.User;
-import com.example.badmintonsystem.entity.Reservation;
-import com.example.badmintonsystem.entity.Racket;
+import com.example.badmintonsystem.entity.*;
+
 import java.util.List;
 
 public interface AdminService {
@@ -56,4 +54,18 @@ public interface AdminService {
      * @param id 待删除的球拍ID
      */
     void deleteRacket(Integer id);
+
+    /**
+     * (管理员)获取所有租借记录
+     * @return 租借记录列表
+     */
+    List<RacketRental> getAllRentals();
+
+    /**
+     * (管理员)强制归还一个球拍
+     * @param rentalId 要归还的租借记录ID
+     * @return 更新后的租借记录
+     */
+    RacketRental forceReturnRacket(Long rentalId);
+
 }
