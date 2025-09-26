@@ -12,6 +12,8 @@ import AdminCourtView from '../views/AdminCourtView.vue'
 import AdminRacketView from '../views/AdminRacketView.vue'
 import AdminRentalView from '../views/AdminRentalView.vue'
 import AdminReservationView from '../views/AdminReservationView.vue'
+import UserProfileView from '../views/UserProfileView.vue'
+import AdminUserView from '../views/AdminUserView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -75,6 +77,16 @@ const router = createRouter({
           path: 'admin/reservations',
           name: 'admin-reservation-management',
           component: AdminReservationView
+        },
+        {
+          path: 'profile', // 2. 添加新路由
+          name: 'user-profile',
+          component: UserProfileView
+        },
+        {
+          path: 'admin/users',
+          name: 'admin-user-management',
+          component: AdminUserView
         }
       ]
     }

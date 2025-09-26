@@ -9,6 +9,8 @@ import jakarta.annotation.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.security.core.context.SecurityContextHolder; // 1. 导入
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,5 +56,51 @@ public class UserServiceImpl implements UserService {
 
         // 4. 登录成功，生成 JWT Token
         return jwtUtil.generateToken(dbUser);
+    }
+
+    @Override
+    public User getProfile() {
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userMapper.findByUsername(username);
+        if (user != null) {
+            user.setPassword(null); // 安全起见，不返回密码
+        }
+        return user;
+    }
+
+    @Override
+    public void updateProfile(User user) {
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User currentUser = userMapper.findByUsername(username);
+
+        user.setId(currentUser.getId()); // 确保更新的是当前用户
+        userMapper.update(user);
+    }
+
+    @Override
+    public void changePassword(String oldPassword, String newPassword) {
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User currentUser = userMapper.findByUsername(username);
+
+        // 1. 验证旧密码是否正确
+        if (!passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
+            throw new CustomException("旧密码不正确");
+        }
+
+        // --- 新增逻辑在这里 ---
+        // 2. 检查新旧密码是否相同
+        if (oldPassword.equals(newPassword)) {
+            throw new CustomException("新密码不能与当前密码相同");
+        }
+        // --------------------
+
+        // 3. 加密新密码 (原步骤2)
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+
+        // 4. 更新密码到数据库 (原步骤3)
+        User userToUpdate = new User();
+        userToUpdate.setId(currentUser.getId());
+        userToUpdate.setPassword(encodedNewPassword);
+        userMapper.update(userToUpdate);
     }
 }

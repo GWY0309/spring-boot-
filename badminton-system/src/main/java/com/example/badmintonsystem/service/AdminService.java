@@ -89,4 +89,18 @@ public interface AdminService {
      */
     void cancelReservation(Long id);
 
+    /**
+     * (管理员) 更新一个用户信息
+     * @param id 用户ID
+     * @param user 包含更新信息的用户对象
+     * @return 更新后的用户对象
+     */
+    User updateUser(Long id, User user);
+
+    /**
+     * (管理员) 删除一个用户
+     * @param id 要删除的用户ID
+     */
+    void deleteUser(Long id);
+
 }

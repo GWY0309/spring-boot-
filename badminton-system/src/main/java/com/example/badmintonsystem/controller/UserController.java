@@ -6,7 +6,6 @@ import com.example.badmintonsystem.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +48,30 @@ public class UserController {
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
             return ResponseEntity.ok(response);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<User> getProfile() {
+        User user = userService.getProfile();
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<String> updateProfile(@RequestBody User user) {
+        userService.updateProfile(user);
+        return ResponseEntity.ok("个人信息更新成功");
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody Map<String, String> passwordData) {
+        try {
+            String oldPassword = passwordData.get("oldPassword");
+            String newPassword = passwordData.get("newPassword");
+            userService.changePassword(oldPassword, newPassword);
+            return ResponseEntity.ok("密码修改成功");
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

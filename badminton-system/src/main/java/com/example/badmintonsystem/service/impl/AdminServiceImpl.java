@@ -5,6 +5,8 @@ import com.example.badmintonsystem.exception.CustomException;
 import com.example.badmintonsystem.mapper.*;
 import com.example.badmintonsystem.service.AdminService;
 import jakarta.annotation.Resource;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -206,5 +208,46 @@ public class AdminServiceImpl implements AdminService {
             throw new CustomException("该预约已被取消，请勿重复操作");
         }
         reservationMapper.updateStatus(id, 2);
+    }
+
+    @Override
+    @Transactional
+    public User updateUser(Long id, User user) {
+        User existingUser = userMapper.findById(id);
+        if (existingUser == null) {
+            throw new CustomException("要更新的用户不存在");
+        }
+        // 只允许更新部分字段
+        existingUser.setNickname(user.getNickname());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setRole(user.getRole());
+
+        userMapper.update(existingUser);
+        return existingUser;
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        // 1. 获取当前操作的管理员信息
+        String currentAdminUsername = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User currentAdmin = userMapper.findByUsername(currentAdminUsername);
+
+        // 2. 检查是否在删除自己
+        if (currentAdmin.getId().equals(id)) {
+            throw new CustomException("无法删除自己");
+        }
+
+        // 3. 检查是否在删除其他管理员
+        User userToDelete = userMapper.findById(id);
+        if (userToDelete == null) {
+            throw new CustomException("要删除的用户不存在");
+        }
+        if ("ADMIN".equals(userToDelete.getRole())) {
+            throw new CustomException("不允许删除其他管理员账户");
+        }
+
+        // 4. 执行删除
+        userMapper.deleteById(id);
     }
 }

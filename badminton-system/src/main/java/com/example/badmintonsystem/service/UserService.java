@@ -20,4 +20,23 @@ public interface UserService {
      * @return 登录成功后的 token 或用户信息
      */
     String login(String username, String password);
+
+    /**
+     * 获取当前登录用户的个人信息
+     * @return 用户对象
+     */
+    User getProfile();
+
+    /**
+     * 更新当前登录用户的个人信息
+     * @param user 包含要更新字段的用户对象
+     */
+    void updateProfile(User user);
+
+    /**
+     * 修改当前登录用户的密码
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     */
+    void changePassword(String oldPassword, String newPassword);
 }

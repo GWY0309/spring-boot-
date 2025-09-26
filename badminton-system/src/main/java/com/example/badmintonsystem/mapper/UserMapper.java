@@ -7,10 +7,20 @@ import java.util.List; // 导入 List
 @Mapper // 告诉 Spring Boot 这是一个 MyBatis 的 Mapper 接口
 public interface UserMapper {
 
-    // 我们将在这里定义数据库操作方法
-    // 例如：根据用户名查询用户
     User findByUsername(String username);
-    // 在 UserMapper.java 文件中，findByUsername 方法下面，添加新方法
+
     void insert(User user);
+
     List<User> findAll();
+
+    /**
+     * 更新用户信息
+     * @param user 包含ID和待更新字段的用户对象
+     * @return 更新的行数
+     */
+    int update(User user);
+
+    User findById(Long id);
+
+    int deleteById(Long id);
 }

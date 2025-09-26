@@ -8,10 +8,15 @@ import {
   Tickets,
   GobletSquare,
   Setting,
+  Sell,
+  List,
+  Calendar,
+  User,
+  ArrowDown
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
-const userStore = useUserStore() // 2. 在顶层获取 store 实例
+const userStore = useUserStore()
 
 const handleLogout = () => {
   userStore.clearToken()
@@ -25,8 +30,18 @@ const handleLogout = () => {
     <el-header class="header">
       <div class="logo-title">羽毛球场地预约系统</div>
       <div class="user-info">
-        <span>欢迎您，{{ userStore.userInfo.username }}</span>
-        <el-button type="danger" plain @click="handleLogout">退出登录</el-button>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            欢迎您，{{ userStore.userInfo.username }}
+            <el-icon class="el-icon--right"><arrow-down /></el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="router.push('/home/profile')">个人中心</el-dropdown-item>
+              <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </el-header>
 
@@ -82,11 +97,9 @@ const handleLogout = () => {
 </template>
 
 <style scoped>
-/* style 部分保持不变 */
 .main-layout {
   height: 100vh;
 }
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -94,29 +107,26 @@ const handleLogout = () => {
   background-color: #fff;
   border-bottom: 1px solid #dcdfe6;
 }
-
 .logo-title {
   font-size: 20px;
   font-weight: bold;
 }
-
 .user-info {
   display: flex;
   align-items: center;
 }
-
-.user-info span {
-  margin-right: 15px;
+.el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
 }
-
 .aside {
   border-right: 1px solid #dcdfe6;
 }
-
 .el-menu-vertical {
-  height: 100%; /* 让菜单高度占满侧边栏 */
+  height: 100%;
 }
-
 .main-content {
   background-color: #f0f2f5;
   padding: 20px;

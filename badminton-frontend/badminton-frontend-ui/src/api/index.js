@@ -72,3 +72,16 @@ export const getAvailableRackets = () => {
 export const rentRacket = (racketId) => {
   return apiClient.post(`/rackets/${racketId}/rent`);
 };
+
+// --- 个人中心 API ---
+export const getProfile = () => {
+  return apiClient.get('/user/profile');
+};
+
+export const updateProfile = (profileData) => {
+  return apiClient.put('/user/profile', profileData);
+};
+
+export const changePassword = (oldPassword, newPassword) => {
+  return apiClient.put('/user/change-password', { oldPassword, newPassword });
+};

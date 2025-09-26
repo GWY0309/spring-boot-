@@ -89,3 +89,19 @@ export const updateReservation = (id, reservationData) => {
 export const cancelReservation = (id) => {
   return adminApiClient.put(`/reservations/${id}/cancel`)
 }
+
+// --- 用户管理 API ---
+
+// (管理员)获取所有用户列表
+export const getAllUsers = () => {
+  return adminApiClient.get('/users')
+}
+
+// --- 用户管理 CRUD API ---
+export const updateUser = (id, userData) => {
+  return adminApiClient.put(`/users/${id}`, userData);
+};
+
+export const deleteUser = (id) => {
+  return adminApiClient.delete(`/users/${id}`);
+};
